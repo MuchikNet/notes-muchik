@@ -1,0 +1,32 @@
+{
+  "rules": {
+    "notes": {
+      "$uid": {
+        "path": {
+          ".read": "(auth != null && $uid == auth.uid)",
+          "$id": {
+            ".validate": "newData.hasChildren(['path', 'modified'])",
+            "path": {
+              ".validate": "newData.isString()"
+            },
+            "modified": {
+              ".validate": "newData.isNumber()"
+            },
+            "$other": {
+              ".validate": "false"
+            },
+            ".read": "(auth != null && $uid == auth.uid)",
+            ".write": "(auth != null && $uid == auth.uid)"
+          }
+        },
+        "content": {
+          "$id": {
+            ".validate": "newData.isString()",
+            ".read": "(auth != null && $uid == auth.uid)",
+            ".write": "(auth != null && $uid == auth.uid)"
+          }
+        }
+      }
+    }
+  }
+}

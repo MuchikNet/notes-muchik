@@ -1,0 +1,19 @@
+path /notes/{uid}/path {
+    read() { isUser(uid) }
+}
+path /notes/{uid}/path/{id} is Note {
+    read() { isUser(uid) }
+    write() { isUser(uid) }
+}
+path /notes/{uid}/content/{id} is String {
+    read() { isUser(uid) }
+    write() { isUser(uid) }
+}
+
+type Note {
+    path: String,
+    modified: Number
+}
+
+isUser(uid) { auth != null && uid == currentUser() }
+currentUser() { auth.uid }

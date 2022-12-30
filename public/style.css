@@ -1,0 +1,94 @@
+:root {
+    --c1: rgb(244, 236, 216);
+    --c2: rgb(91, 70, 54);
+}
+
+body {
+    background-color: var(--c1);
+    color: var(--c2);
+    font-size: 22px;
+    text-align: center;
+}
+
+input {
+    outline: 0;
+    width: 50px;
+    text-align: center;
+}
+
+button, .button, input {
+    background-color: var(--c1);
+    border: 1px solid var(--c2);
+    color: var(--c2);
+    padding: .5em 1em;
+}
+
+.view {
+    display: flex;
+    text-align: left;
+    padding: .5em 0;
+}
+
+@media (max-width: 769px) {
+    .view {
+        display: block;
+    }
+}
+
+.right {
+    text-align: right;
+}
+
+#paths {
+    min-width: 320px;
+    padding-right: .5em;
+    font-variant: small-caps;
+}
+
+#content {
+    width: 100%;
+    overflow: auto;
+}
+
+#content pre {
+    outline: 0;
+    border-top: 1px solid var(--c2);
+    border-bottom: 1px solid var(--c2);
+    padding: .5em;
+    margin-top: 5px;
+}
+
+#content img {
+    border: 1px solid var(--c2);
+}
+
+#content pre::first-line {
+    font-style: italic;
+    font-variant: small-caps;
+}
+
+#tool {
+    position: absolute;
+    background-color: var(--c1);
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    left: 0px;
+    padding: .5em;
+}
+#tool canvas {
+    border: 1px solid var(--c2);
+    margin-top: .5em;
+}
+
+#tool-pencil {
+    background-color: var(--c2);
+}
+
+#tool-eraser {
+    background-color: transparent;
+}
+
+#content-delete {
+    margin-right: 3em;
+}
