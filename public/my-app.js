@@ -111,10 +111,11 @@ class MyApp extends HTMLElement {
             .addEventListener('click', _ => this.$canvas.removeAttribute('data'));
 
         this.$canvas.addEventListener('mousedown', evt => evt.target.over = true);
-        this.$canvas.addEventListener('touchstart', evt => evt.target.over = true);
         this.$canvas.addEventListener('mouseup', evt => evt.target.over = false);
-        this.$canvas.addEventListener('touchend', evt => evt.target.over = false);
         this.$canvas.addEventListener('mousemove', this.onDraw.bind(this));
+
+        this.$canvas.addEventListener('touchstart', evt => evt.target.over = true);
+        this.$canvas.addEventListener('touchend', evt => evt.target.over = false);
         this.$canvas.addEventListener('touchmove', this.onDraw.bind(this));
 
         onValue(ref(database, this.base + 'path/'), raw => {
