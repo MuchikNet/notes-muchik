@@ -59,7 +59,7 @@ class MyApp extends HTMLElement {
                 <div>
                     <input type="text" value="320" id="tool-width"> x 
                     <input type="text" value="180" id="tool-height">
-                    <button id="tool-pencil">&nbsp;</button>
+                    <button id="tool-pencil" class="active">&nbsp;</button>
                     <button id="tool-eraser">&nbsp;</button>
                     <button id="tool-ok">Ok</button>
                     <button id="tool-close">X</button>
@@ -105,18 +105,39 @@ class MyApp extends HTMLElement {
             });
         this.shadowDOM
             .querySelector('#tool-pencil')
-            .addEventListener('click', _ => this.$canvas.setAttribute('data', 'rgb(91, 70, 54)'));
+            .addEventListener('click', evt => {
+                evt.target.className = 'active';
+                this.shadowDOM.querySelector('#tool-eraser').className = '';
+                this.$canvas.setAttribute('data', 'rgb(91, 70, 54)');
+            });
         this.shadowDOM
             .querySelector('#tool-eraser')
-            .addEventListener('click', _ => this.$canvas.removeAttribute('data'));
+            .addEventListener('click', evt => {
+                evt.target.className = 'active';
+                this.shadowDOM.querySelector('#tool-pencil').className = '';
+                this.$canvas.removeAttribute('data');
+            });
 
         this.$canvas.addEventListener('mousedown', evt => evt.target.over = true);
         this.$canvas.addEventListener('mouseup', evt => evt.target.over = false);
         this.$canvas.addEventListener('mousemove', this.onDraw.bind(this));
 
-        this.$canvas.addEventListener('touchstart', evt => evt.target.over = true);
-        this.$canvas.addEventListener('touchend', evt => evt.target.over = false);
-        this.$canvas.addEventListener('touchmove', this.onDraw.bind(this));
+        this.$canvas.addEventListener('touchstart', evt => {
+            let mouseEvent = new MouseEvent('mousedown', {});
+            this.$canvas.dispatchEvent(mouseEvent);
+        });
+        this.$canvas.addEventListener('touchend', evt => {
+            let mouseEvent = new MouseEvent('mouseup', {});
+            this.$canvas.dispatchEvent(mouseEvent);
+        });
+        this.$canvas.addEventListener('touchmove', evt => {
+            let touch = evt.touches[0];
+            let mouseEvent = new MouseEvent('mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            this.$canvas.dispatchEvent(mouseEvent);
+        });
 
         onValue(ref(database, this.base + 'path/'), raw => {
             this.notes = raw.val();
@@ -212,7 +233,7 @@ class MyApp extends HTMLElement {
         } else ctx.clearRect(
             evt.clientX - rect.left,
             evt.clientY - rect.top,
-            5, 5
+            10, 10
         );
     }
 }

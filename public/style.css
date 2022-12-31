@@ -1,6 +1,7 @@
 :root {
     --c1: rgb(244, 236, 216);
     --c2: rgb(91, 70, 54);
+    --c3: rgb(0, 0, 255);
 }
 
 body {
@@ -22,6 +23,10 @@ button, .button, input {
     border: 1px solid var(--c2);
     color: var(--c2);
     padding: .5em 1em;
+}
+
+button.active {
+    border: 3px solid var(--c3);
 }
 
 .view {
