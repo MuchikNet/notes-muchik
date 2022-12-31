@@ -1,4 +1,3 @@
 # [Notes Muchik](https://notes.muchik.net/)
 
-* Use Firebase
-* Images with canvas
+![screen](./screen.png)

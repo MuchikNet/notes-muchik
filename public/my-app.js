@@ -215,7 +215,6 @@ class MyApp extends HTMLElement {
     onDelete() {
         remove(ref(database, this.base + 'path/' + this.current));
         remove(ref(database, this.base + 'content/' + this.current));
-        this.$paths.innerHTML = '';
         this.$content.innerHTML = '';
     }
 
