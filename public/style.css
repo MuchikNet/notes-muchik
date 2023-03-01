@@ -62,6 +62,7 @@ button.active {
     border-bottom: 1px solid var(--c2);
     padding: .5em;
     margin-top: 5px;
+    white-space: break-spaces;
 }
 
 #content img {
