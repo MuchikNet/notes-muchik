@@ -35,9 +35,19 @@ button.active {
     padding: .5em 0;
 }
 
+#list {
+    display: none;
+}
+
 @media (max-width: 769px) {
     .view {
         display: block;
+    }
+    #list {
+        display: inline-block;
+    }
+    #paths {
+        display: none;
     }
 }
 

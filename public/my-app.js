@@ -49,6 +49,7 @@ class MyApp extends HTMLElement {
     templateUser() {
         return /*html*/`
             <div>${ this.user.displayName || '' }
+                <button id="list">Toggle List</button>
                 <button id="new">New</button>
                 <button id="logout">Logout</button>
             </div>
@@ -85,6 +86,9 @@ class MyApp extends HTMLElement {
         this.shadowDOM
             .querySelector('#logout')
             .addEventListener('click', _ => signOut());
+        this.shadowDOM
+            .querySelector('#list')
+            .addEventListener('click', this.onToggleList.bind(this));
         this.shadowDOM
             .querySelector('#new')
             .addEventListener('click', this.onNew.bind(this));
@@ -164,6 +168,10 @@ class MyApp extends HTMLElement {
         }
     }
 
+    onToggleList() {
+        this.$paths.style.display = (this.$paths.style.display != 'block') ? 'block' : 'none';
+    }
+
     onNew() {
         let key = push(ref(database, this.base + 'path/')).key;
         this.current = key;
@@ -204,6 +212,7 @@ class MyApp extends HTMLElement {
 
     onSave() {
         let $content = this.$content.querySelector('pre').innerHTML;
+        $content = $content.replace(/<(|\/)(p|div)[^>]*>/g, '');
         let path = $content.slice(0, $content.indexOf('<br>'));
         let content = $content.slice(path.length + 4);
         update(ref(database, this.base + 'path/' + this.current), {
