@@ -2,11 +2,11 @@
   "rules": {
     "notes": {
       "$uid": {
-        "path": {
+        "desc": {
           ".read": "(auth != null && $uid == auth.uid)",
           "$id": {
-            ".validate": "newData.hasChildren(['path', 'modified'])",
-            "path": {
+            ".validate": "newData.hasChildren(['desc', 'modified'])",
+            "desc": {
               ".validate": "newData.isString()"
             },
             "modified": {

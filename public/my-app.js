@@ -49,12 +49,11 @@ class MyApp extends HTMLElement {
     templateUser() {
         return /*html*/`
             <div>${ this.user.displayName || '' }
-                <button id="list">Toggle List</button>
                 <button id="new">New</button>
                 <button id="logout">Logout</button>
             </div>
             <div class="view">
-                <div id="paths"></div><div id="content"></div>
+                <div id="notes"></div><div id="content"></div>
             </div>
             <div id="tool" style="display: none;">
                 <div>
@@ -79,16 +78,13 @@ class MyApp extends HTMLElement {
 
     initUser() {
         this.base = `/notes/${ this.user.uid}/`;
-        this.$paths = this.shadowDOM.querySelector('#paths');
+        this.$notes = this.shadowDOM.querySelector('#notes');
         this.$content = this.shadowDOM.querySelector('#content');
         this.$tool = this.shadowDOM.querySelector('#tool');
         this.$canvas = this.shadowDOM.querySelector('canvas');
         this.shadowDOM
             .querySelector('#logout')
             .addEventListener('click', _ => signOut());
-        this.shadowDOM
-            .querySelector('#list')
-            .addEventListener('click', this.onToggleList.bind(this));
         this.shadowDOM
             .querySelector('#new')
             .addEventListener('click', this.onNew.bind(this));
@@ -143,16 +139,16 @@ class MyApp extends HTMLElement {
             this.$canvas.dispatchEvent(mouseEvent);
         });
 
-        onValue(ref(database, this.base + 'path/'), raw => {
+        onValue(ref(database, this.base + 'desc/'), raw => {
             this.notes = raw.val();
             if (!this.notes) return;
-            let $paths = Object.keys(this.notes).map(key => {
+            let $notes = Object.keys(this.notes).map(key => {
                 return /*html*/`
-                    <div data="${ key }">» ${ this.notes[key].path }</div>
+                    <div data="${ key }">${ this.notes[key].desc }</div>
                 `;
             });
-            this.$paths.innerHTML = $paths.join('\n');
-            this.$paths
+            this.$notes.innerHTML = $notes.join('\n');
+            this.$notes
                 .querySelectorAll('div')
                 .forEach(btn => 
                     btn.addEventListener('click', evt => {
@@ -168,28 +164,27 @@ class MyApp extends HTMLElement {
         }
     }
 
-    onToggleList() {
-        this.$paths.style.display = (this.$paths.style.display != 'block') ? 'block' : 'none';
-    }
-
     onNew() {
-        let key = push(ref(database, this.base + 'path/')).key;
+        let key = push(ref(database, this.base + 'desc/')).key;
         this.current = key;
-        update(ref(database, this.base + 'path/' + key), {
-            path: 'note', modified: Date.now()
+        update(ref(database, this.base + 'desc/' + key), {
+            desc: 'new note', modified: Date.now()
         }).then(_ => this.onEdit());
     }
 
     onEdit() {
-        let note = this.notes[this.current];
+        this.$notes.style.display = 'none';
+        this.$content.style.display = 'block';
         this.$content.innerHTML = /*html*/`
             <div class="right">
                 <button id="content-delete">DELETE</button>
                 <button id="content-img">IMG</button>
                 <button id="content-save">SAVE</button>
+                <button id="content-close">CLOSE</button>
             </div>
-            <pre contentEditable>${ note.path }<br></pre>
+            <pre contentEditable></pre>
         `;
+        this.$content.querySelector('pre').focus();
         get(ref(database, this.base + 'content/' + this.current))
             .then(raw => this.$content.querySelector('pre').innerHTML += raw.val() || '');
         this.$content
@@ -208,23 +203,28 @@ class MyApp extends HTMLElement {
                 );
                 this.$tool.style.display = '';
             });
+        this.$content
+            .querySelector('#content-close')
+            .addEventListener('click', _ => {
+                this.$notes.style.display = 'block';
+                this.$content.style.display = 'none';
+            });
     }
 
     onSave() {
-        let $content = this.$content.querySelector('pre').innerHTML;
-        $content = $content.replace(/<(|\/)(p|div)[^>]*>/g, '');
-        let path = $content.slice(0, $content.indexOf('<br>'));
-        let content = $content.slice(path.length + 4);
-        update(ref(database, this.base + 'path/' + this.current), {
-            path: path, modified: Date.now()
+        let $pre = this.$content.querySelector('pre');
+        update(ref(database, this.base + 'desc/' + this.current), {
+            desc: $pre.innerText.slice(0, 20), modified: Date.now()
         });
-        set(ref(database, this.base + 'content/' + this.current), content);
+        set(ref(database, this.base + 'content/' + this.current), $pre.innerHTML);
     }
 
     onDelete() {
-        remove(ref(database, this.base + 'path/' + this.current));
+        remove(ref(database, this.base + 'desc/' + this.current));
         remove(ref(database, this.base + 'content/' + this.current));
         this.$content.innerHTML = '';
+        this.$notes.style.display = 'block';
+        this.$content.style.display = 'none';
     }
 
     onDraw(evt) {

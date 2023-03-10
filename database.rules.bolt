@@ -1,7 +1,7 @@
-path /notes/{uid}/path {
+path /notes/{uid}/desc {
     read() { isUser(uid) }
 }
-path /notes/{uid}/path/{id} is Note {
+path /notes/{uid}/desc/{id} is Note {
     read() { isUser(uid) }
     write() { isUser(uid) }
 }
@@ -11,7 +11,7 @@ path /notes/{uid}/content/{id} is String {
 }
 
 type Note {
-    path: String,
+    desc: String,
     modified: Number
 }
 

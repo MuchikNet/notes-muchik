@@ -23,6 +23,8 @@ button, .button, input {
     border: 1px solid var(--c2);
     color: var(--c2);
     padding: .5em 1em;
+    border-radius: 3px;
+    font-weight: bold;
 }
 
 button.active {
@@ -35,19 +37,19 @@ button.active {
     padding: .5em 0;
 }
 
-#list {
-    display: none;
+my-app {
+    display: block;
+    max-width: 1080px;
+    margin: auto;
 }
 
 @media (max-width: 769px) {
-    .view {
+    #notes > div {
+        max-width: max-content;
         display: block;
     }
-    #list {
-        display: inline-block;
-    }
-    #paths {
-        display: none;
+    .view {
+        display: block;
     }
 }
 
@@ -55,15 +57,20 @@ button.active {
     text-align: right;
 }
 
-#paths {
-    min-width: 320px;
-    padding-right: .5em;
-    font-variant: small-caps;
+#notes > div {
+    border-radius: 3px;
+    max-width: 150px;
+    border: 1px solid var(--c2);
+    display: inline-block;
+    padding: .5em;
+    margin: .5em;
+    font-size: smaller;
 }
 
 #content {
     width: 100%;
     overflow: auto;
+    display: none;
 }
 
 #content pre {
@@ -77,11 +84,6 @@ button.active {
 
 #content img {
     border: 1px solid var(--c2);
-}
-
-#content pre::first-line {
-    font-style: italic;
-    font-variant: small-caps;
 }
 
 #tool {

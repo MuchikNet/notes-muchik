@@ -1,3 +1,6 @@
 # [Notes Muchik](https://notes.muchik.net/)
 
-![screen](./screen.png)
+- [x] Save texts
+- [x] Save draws
+- [ ] Sort notes
+- [ ] Filter notes
